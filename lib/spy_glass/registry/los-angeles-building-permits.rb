@@ -5,7 +5,7 @@ opts = {
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
   source: 'https://data.lacity.org/resource/nbyu-2ha9.json?'+Rack::Utils.build_query({
     '$limit' => 100,
-    #'$order' => 'application_date DESC',
+    '$order' => 'status_date DESC',
     '$where' => <<-WHERE.oneline
       latest_status = 'CofO Issued' AND
       pcis_permit IS NOT NULL AND
