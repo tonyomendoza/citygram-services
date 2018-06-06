@@ -4,13 +4,12 @@ opts = {
   path: '/los-angeles-building-permits',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
   source: 'https://data.lacity.org/resource/nbyu-2ha9.json?'+Rack::Utils.build_query({
-    '$limit' => 100,
+    '$limit' => 20,
     '$order' => 'status_date DESC',
     '$where' => <<-WHERE.oneline
       latest_status = 'CofO Issued' AND
       pcis_permit IS NOT NULL AND
-      location_1 IS NOT NULL AND
-      to_char(status_date, 'YYYY') = "2018"
+      location_1 IS NOT NULL
     WHERE
   })
 }
