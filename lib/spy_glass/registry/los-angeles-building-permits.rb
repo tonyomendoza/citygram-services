@@ -10,8 +10,7 @@ opts = {
       latest_status = 'CofO Issued' AND
       pcis_permit IS NOT NULL AND
       location_1 IS NOT NULL AND
-      to_char(status_date, 'YYYY-IW') BETWEEN to_char(sysdate - 21, 'YYYY-IW') AND
-                                       to_char(sysdate, 'YYYY-IW')
+      to_char(status_date, 'YYYY') = "2018"
     WHERE
   })
 }
