@@ -52,10 +52,8 @@ end
       
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
-    Last reported #{item['seconds_since_report']} seconds ago.  
+    Last reported #{item['seconds_since_report']} seconds ago. #{routeCollection.length}
     TITLE
-
-    title = title
       
     {
       'id' => item['id'],
