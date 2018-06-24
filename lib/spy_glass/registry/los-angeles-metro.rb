@@ -53,6 +53,8 @@ end
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
     Last reported #{item['seconds_since_report']} seconds ago.  
     TITLE
+
+    title = title + routeCollection
       
     {
       'id' => item['id'],
