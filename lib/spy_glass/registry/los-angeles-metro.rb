@@ -26,7 +26,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       
     # Should return ONE item, the route and run
     runItem = Array.new
-    SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |collection|
+    SpyGlass::Registry << SpyGlass::Client::Base.new(routeOpts) do |collection|
       runItem = collection.values[0].map do |item|
       end
     end
