@@ -25,14 +25,15 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     }
       
     # Should return ONE item, the route and run
-    runItem = Array.new
+    runItem = Object.new
     SpyGlass::Registry << SpyGlass::Client::Base.new(routeOpts) do |runCollection|
-      runItem = runCollection.values[0].map do |item|
+      runFeatures = runCollection.values[0].map do |rItem|
+        runItem = rItem
       end
     end
       
     title = <<-TITLE.oneline
-    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{runItem[0]['display_name']};.
+    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{runItem['display_name']};.
     Last reported #{item['seconds_since_report']} seconds ago.
     TITLE
       
