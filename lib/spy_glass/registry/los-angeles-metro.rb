@@ -28,10 +28,10 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     }
       
     # Should return ONE item, the route and run
-    runItem = nil
+    $runItem = nil
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
-        runItem = rItem
+        $runItem = rItem
       end
     end
     
@@ -42,7 +42,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     if runItem.nil?
       title = title + "Could not find name of route." + 'http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
     else
-      title = title + runItem['id']
+      title = title + $runItem['id']
     end
       
     {
