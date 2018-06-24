@@ -26,6 +26,20 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
         WHERE
         })
     }
+      
+      
+    # Should return ONE item, the route and run
+    SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
+      features = $runCollection.values[0].map do |item|
+        title = <<-TITLE.oneline
+          #{item['id']}
+        TITLE
+        {
+        'properties' => item.merge('title' => title)
+      }
+      end
+      {'type' => 'FeatureCollection', 'features' => features}
+    end
     
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
