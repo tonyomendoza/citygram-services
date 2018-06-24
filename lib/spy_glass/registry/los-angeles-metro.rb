@@ -40,7 +40,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     if runCollection.nil?
       title = title + "Could not find name of route." + 'http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
     else
-      title = title + runCollection[0]['id']
+      #title = title + runCollection[0]['id']
     end
       
     {
