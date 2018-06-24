@@ -28,7 +28,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     runItem = nil
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
-        runItem = rItem
+        runItem = rItem['id']
       end
     end
       
