@@ -7,7 +7,6 @@ opts = {
     '$where' => <<-WHERE.oneline
       id = IS NOT NULL AND
       heading IS NOT NULL AND
-      id = IS NOT NULL AND
       longitude IS NOT NULL AND
       latitude IS NOT NULL AND
       predictable = true 
@@ -21,14 +20,18 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
      routeOpts = {
       path: '/los-angeles-metro',
       cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
-      source: 'http://api.metro.net/agencies/lametro/vehicles/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
+      source: 'http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/runs/' + item['run_id'] + '/?'+Rack::Utils.build_query({
+        '$where' => <<-WHERE.oneline
+          id = IS NOT NULL
+        WHERE
+  })
     }
       
     # Should return ONE item, the route and run
     runItem = nil
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
-        #runItem = rItem['id']
+        runItem = rItem['id']
       end
     end
       
