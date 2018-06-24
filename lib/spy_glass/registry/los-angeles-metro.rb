@@ -40,7 +40,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     Last reported #{item['seconds_since_report']} seconds ago. 
     TITLE
     if !runItem.nil?
-      title += item['id']
+      title = title + item['id']
       
     {
       'id' => item['id'],
