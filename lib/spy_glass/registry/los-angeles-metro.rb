@@ -21,7 +21,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     
     routeUrl = URI('http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/')
     routeConnection = Faraday.new(url: routeUrl.to_s)
-    #routeResponse = routeConnection.get
+    routeResponse = routeConnection.get
     #routeCollection = JSON.parse(routeResponse.body)
     
     
