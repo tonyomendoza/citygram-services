@@ -30,9 +30,12 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     # Should return ONE item, the route and run
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = $runCollection.values[0].map do |rItem|
-        'properties' => item
+        title = <<-TITLE.oneline
+          #{item['id']}
+        TITLE
+      'properties' => item.merge('title' => title)
       end
-      {'type' => 'FeatureCollection', 'features' => features}
+      {'type' => 'FeatureCollection', 'features' => runFeatures}
     end
     
     title = <<-TITLE.oneline
