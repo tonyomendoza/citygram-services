@@ -39,10 +39,10 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     Last reported #{item['seconds_since_report']} seconds ago. 
     TITLE
   
-    if runCollection.nil?
+    if runCollection.values[0].map.length == 0
       title = title + "Could not find name of route." + 'http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
     else
-      title = runCollection.values[0].map["id"]
+      title = title#runCollection.values[0].map["id"]
     end
       
     {
