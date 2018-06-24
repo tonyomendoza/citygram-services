@@ -14,6 +14,8 @@ opts = {
   })
 }
 
+$runItem = nil
+
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
      
@@ -28,7 +30,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     }
       
     # Should return ONE item, the route and run
-    $runItem = nil
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
         $runItem = rItem
