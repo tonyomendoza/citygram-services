@@ -28,12 +28,12 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     runItem = nil
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
-        runItem = rItem['id']
+        #runItem = rItem['id']
       end
     end
       
     title = <<-TITLE.oneline
-    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{runItem.nil?} ;.
+    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run {item['run_id']}.
     Last reported #{item['seconds_since_report']} seconds ago.
     TITLE
       
