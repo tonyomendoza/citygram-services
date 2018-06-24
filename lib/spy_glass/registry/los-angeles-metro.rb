@@ -40,7 +40,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     Last reported #{item['seconds_since_report']} seconds ago. 
     TITLE
     if runItem.nil?
-      title = title
+      title = title + "Could not find name of route."
     else
       title = title + item['id']
     end
