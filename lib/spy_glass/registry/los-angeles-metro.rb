@@ -18,18 +18,37 @@ opts = {
 
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
-    
-    routeUrl = URI('http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/')
-    routeConnection = Faraday.new(url: routeUrl.to_s)
-    routeResponse = routeConnection.get
-    routeCollection = JSON.parse(routeResponse.body)
-    routeFeatures = routeCollection.values[0].map do |record|
-        routeTitle = "Vehicle no. #{record['id']}"
-        {
-            'properties' => record.merge('title' => routeTitle)
-        }
-    end
-    
+      
+routeOpts = {
+  path: '/los-angeles-metro-rail',
+  cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
+  source: 'http://api.metro.net/agencies/lametro-rail/vehicles/?'
+}
+
+SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |routeCollection|
+    features = routeCollection.values[0].map do |item|
+    title = <<-TITLE.oneline
+    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{item['route_id']};.
+    Last reported #{item['seconds_since_report']} seconds ago.
+    TITLE
+
+    {
+      'id' => item['id'],
+      'type' => 'Feature',
+      'geometry' => {
+        'type' => 'Point',
+        'coordinates' => [
+          item['longitude'].to_f,
+          item['latitude'].to_f
+        ]
+      },
+      'properties' => item.merge('title' => title)
+    }
+  end
+
+  {'type' => 'FeatureCollection', 'features' => features}
+end
+      
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
     Last reported #{item['seconds_since_report']} seconds ago.  
