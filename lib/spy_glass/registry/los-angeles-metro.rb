@@ -14,8 +14,6 @@ opts = {
   })
 }
 
-$runItem = nil
-
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
      
@@ -32,7 +30,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     # Should return ONE item, the route and run
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
       runFeatures = runCollection.values[0].map do |rItem|
-        $runItem = rItem
       end
     end
     
@@ -40,10 +37,10 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
     Last reported #{item['seconds_since_report']} seconds ago. 
     TITLE
-    if runItem.nil?
+    if runCollection.nil?
       title = title + "Could not find name of route." + 'http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
     else
-      title = title + $runItem['id']
+      title = title + runCollection[0]['id']
     end
       
     {
