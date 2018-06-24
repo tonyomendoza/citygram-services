@@ -22,7 +22,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     routeUrl = URI('http://api.metro.net/agencies/lametro/routes/' + item['route_id'] + '/')
     routeConnection = Faraday.new(url: routeUrl.to_s)
     routeResponse = routeConnection.get
-    routeItem = JSON.parse(routeResponse.body).values[0].map[0]
+    routeItem = JSON.parse(routeResponse.body).values[0]
     
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
