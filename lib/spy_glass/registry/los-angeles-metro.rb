@@ -14,6 +14,8 @@ opts = {
   })
 }
 
+$runCollection = nil
+
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
      
@@ -29,8 +31,8 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       
       
     # Should return ONE item, the route and run
-    SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |runCollection|
-      runFeatures = runCollection.values[0].map do |runItem|
+    SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |$runCollection|
+      runFeatures = $runCollection.values[0].map do |runItem|
         runTitle = <<-TITLE.oneline
           #{runItem['id']}
         TITLE
@@ -43,7 +45,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
-    Last reported #{item['seconds_since_report']} seconds ago. #{runCollection.length} 
+    Last reported #{item['seconds_since_report']} seconds ago. #{$runCollection.length} 
     TITLE
       
     {
