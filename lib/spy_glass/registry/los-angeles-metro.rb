@@ -22,12 +22,16 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
       source: 'http://api.metro.net/agencies/lametro/vehicles/' + item['route_id'] + '/runs/' + item['run_id'] + '/'
     }
+      
     # Should return ONE item, the route and run
+    runItem = null
     SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |collection|
-      runItem = collection.values[0].map[0]
+      runItem = collection.values[0].map do |item|
+      end
+    end
       
     title = <<-TITLE.oneline
-    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{runItem['display_name']};.
+    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{runItem[0]['display_name']};.
     Last reported #{item['seconds_since_report']} seconds ago.
     TITLE
       
