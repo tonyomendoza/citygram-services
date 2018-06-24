@@ -43,6 +43,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       title = title
     else
       title = title + item['id']
+    end
       
     {
       'id' => item['id'],
