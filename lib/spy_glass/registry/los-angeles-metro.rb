@@ -55,7 +55,7 @@ end
     Last reported #{item['seconds_since_report']} seconds ago.  
     TITLE
 
-    title = title + routeCollection.nil?
+    title = title
       
     {
       'id' => item['id'],
