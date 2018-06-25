@@ -22,11 +22,10 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
 routeOpts = {
   path: '/los-angeles-metro-rail',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
-  source: 'http://api.metro.net/agencies/lametro-rail/vehicles/?'
+  source: "http://api.metro.net/agencies/lametro-rail/routes/#{item['route_id']}/runs/#{item'run_id'}/"
 }
 
-    response = SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts)
-    routes = response.values[0].map['id']
+    routes = response.values.length
       
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
