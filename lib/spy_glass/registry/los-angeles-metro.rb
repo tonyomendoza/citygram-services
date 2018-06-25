@@ -25,7 +25,7 @@ routeOpts = {
   source: 'http://api.metro.net/agencies/lametro-rail/vehicles/?'
 }
 
-    routes = SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
+    routes = SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
     features = routeCollection.values[0].map do |item|
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{item['route_id']};.
@@ -33,15 +33,6 @@ routeOpts = {
     TITLE
 
     {
-      'id' => item['id'],
-      'type' => 'Feature',
-      'geometry' => {
-        'type' => 'Point',
-        'coordinates' => [
-          item['longitude'].to_f,
-          item['latitude'].to_f
-        ]
-      },
       'properties' => item.merge('title' => title)
     }
   end
