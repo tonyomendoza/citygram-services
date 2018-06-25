@@ -19,14 +19,15 @@ opts = {
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
       
-routeOpts = {
-  path: '/los-angeles-metro-rail',
-  cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
-  source: "http://api.metro.net/agencies/lametro-rail/routes/#{item['route_id']}/runs/#{item['run_id']}/"
-}
+    routeOpts = {
+      path: '/los-angeles-metro-rail',
+      cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
+      source: "http://api.metro.net/agencies/lametro-rail/routes/#{item['route_id']}/runs/#{item['run_id']}/"
+    }
 
     routeResponse = SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
       features = routeCollection.values[0].map do |item|
+     return item
     {
       'id' => item['id'],
       'properties' => item.merge('title' => item['id'])
