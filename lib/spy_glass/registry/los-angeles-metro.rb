@@ -17,8 +17,6 @@ opts = {
 }
 
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
-  
-    $run = nil
     features = collection.values[0].map do |item|
     
       
