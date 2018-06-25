@@ -2,6 +2,8 @@ require 'spy_glass/registry'
 require 'faraday'
 require 'json'
 
+$run = nil
+
 opts = {
   path: '/los-angeles-metro',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
