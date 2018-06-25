@@ -28,7 +28,7 @@ routeOpts = {
   source: 'http://api.metro.net/agencies/lametro-rail/vehicles/?'
 }
 
-SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |@routeCollection|
+    SpyGlass::Client::Socrata.new(routeOpts) do |@routeCollection|
     features = @routeCollection.values[0].map do |item|
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{item['route_id']};.
