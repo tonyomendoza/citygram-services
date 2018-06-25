@@ -25,13 +25,20 @@ routeOpts = {
   source: "http://api.metro.net/agencies/lametro-rail/routes/#{item['route_id']}/runs/#{item'run_id'}/"
 }
 
-    routeResponse = SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts)
-    #routeFeatures = collection.values[0].map
-    routes = response.length
+    routeResponse = SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
+      features = routeCollection.values[0].map do |item|
+    {
+      'id' => item['id'],
+      'properties' => item.merge('title' => item['id'])
+    }
+  end
+
+  {'type' => 'FeatureCollection', 'features' => features}
+end
       
     title = <<-TITLE.oneline
     #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
-    Last reported #{item['seconds_since_report']} seconds ago. #{routes}
+    Last reported #{item['seconds_since_report']} seconds ago. #{routeResponse}
     TITLE
       
     {
