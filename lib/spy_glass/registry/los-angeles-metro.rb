@@ -26,17 +26,11 @@ routeOpts = {
 }
 
     routes = SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
-    features = routeCollection.values[0].map do |item|
-    title = <<-TITLE.oneline
-    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route: #{item['route_id']};.
-    Last reported #{item['seconds_since_report']} seconds ago.
-    TITLE
-
+    routeFeatures = routeCollection.values[0].map do |routeItem|
     {
-      'properties' => item.merge('title' => title)
+      'properties' => item.merge('title' => routeItem['id'])
     }
   end
-
   {'type' => 'FeatureCollection', 'features' => features}
 end
       
