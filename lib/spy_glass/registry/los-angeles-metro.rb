@@ -28,10 +28,10 @@ routeOpts = {
     routes = SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
     routeFeatures = routeCollection.values[0].map do |routeItem|
     {
-      'properties' => item.merge('title' => routeItem['id'])
+      'properties' => routeItem.merge('title' => routeItem['id'])
     }
   end
-  {'type' => 'FeatureCollection', 'features' => features}
+  {'type' => 'FeatureCollection', 'features' => routeFeatures}
 end
       
     title = <<-TITLE.oneline
