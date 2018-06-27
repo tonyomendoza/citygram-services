@@ -2,7 +2,6 @@ require 'spy_glass/registry'
 require 'faraday'
 require 'json'
 
-$run = nil
 
 opts = {
   path: '/los-angeles-metro',
@@ -20,30 +19,29 @@ opts = {
 
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     features = collection.values[0].map do |item|
-    
-      
-      #source: "http://api.metro.net/agencies/lametro/routes/#{item['route_id']}/runs/#{item['run_id']}/"
-     
-    routeOpts = {
-      path: '/los-angeles-metro-rail',
-      cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
-      source: "http://api.metro.net/agencies/lametro/routes/#{item['route_id']}/runs/#{item['run_id']}/"
-    }
-      SpyGlass::Registry << SpyGlass::Client::Socrata.new(routeOpts) do |routeCollection|
-      features = routeCollection.values[0].map do |item|
-        $run = item
-        {
-          'id' => item['id'],
-          'properties' => item.merge('title' => item['id'])
-        }
-      end
-      {'type' => 'FeatureCollection', 'features' => features}
+
+    title = "#{SpyGlass::Salutations.next} Bus no. #{item['id']} on route #{item['route_id']}"
+
+    # Returns the run
+    routeUrl = URI("http://api.metro.net/agencies/lametro/routes/#{item['route_id']}/runs/#{item['run_id']}/")
+    routeConnection = Faraday.new(url: routeUrl.to_s)
+    routeResponse = routeConnection.get
+    route = JSON.parse(routeResponse.body)
+
+    hasRoute = true
+    if !route["message"].nil?
+        if route["message"].include? "no run with that id"
+            hasRoute = false
+            route.store("display_name", "")
+            route.store("direction_name", "")
+            title = title + ", an undetermined run (#{item['run_id']})."
+        end
+    else
+        route.store("message", "")
+        title = title + ", run #{route['display_name']}."
     end
-      
-    title = <<-TITLE.oneline
-    #{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']} and run #{item['run_id']}.
-    Last reported #{item['seconds_since_report']} seconds ago. #{$run.nil?}
-    TITLE
+
+    # Set up JSON here
     {
       'id' => item['id'],
       'type' => 'Feature',
@@ -54,7 +52,11 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
           item['latitude'].to_f
         ]
       },
-      'properties' => item.merge('title' => title)
+      'properties' => item.merge('title' => title),
+      'route' => {
+        'direction_name' => route['direction_name'],
+        'display_name' => route['display_name']
+        }
     }
   end
 
