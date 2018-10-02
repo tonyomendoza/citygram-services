@@ -17,19 +17,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     routeResponse = routeConnection.get
     route = JSON.parse(routeResponse.body)
 
-    hasRoute = true
-    if !route["message"].nil?
-        if route["message"].include? "no run with that id"
-            hasRoute = false
-            route.store("display_name", "")
-            route.store("direction_name", "")
-            title = title + ", an undetermined run (#{item['run_id']})."
-        end
-    else
-        route.store("message", "")
-        title = title + ", run #{route['display_name']}."
-    end
-
     # Set up JSON here
     {
       'id' => item['id'],
@@ -43,8 +30,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       },
       'properties' => item.merge('title' => title),
       'route' => {
-        'direction_name' => route['direction_name'],
-        'display_name' => route['display_name']
         }
     }
   end
