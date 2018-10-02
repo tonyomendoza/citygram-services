@@ -11,12 +11,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
 
     title = "#{SpyGlass::Salutations.next} Vehicle no. #{item['id']} on route #{item['route_id']}"
 
-    # Returns the run
-    routeUrl = URI("http://api.metro.net/agencies/lametro-rail/routes/#{item['route_id']}/runs/#{item['run_id']}/")
-    routeConnection = Faraday.new(url: routeUrl.to_s)
-    routeResponse = routeConnection.get
-    route = JSON.parse(routeResponse.body)
-
     # Set up JSON here
     {
       'id' => item['id'],
