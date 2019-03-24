@@ -4,7 +4,7 @@ opts = {
   path: '/los-angeles-311-service-request',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
   source: 'https://data.lacity.org/resource/94t3-k6yn.json?'+Rack::Utils.build_query({
-    '$order' => 'lastupdated DESC',
+    '$order' => 'updateddate DESC',
     '$limit' => 100,
     '$where' => <<-WHERE.oneline
         srnumber IS NOT NULL AND
