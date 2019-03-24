@@ -3,7 +3,7 @@ require 'spy_glass/registry'
 opts = {
   path: '/los-angeles-311-service-request',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
-  source: 'https://data.lacity.org/resource/h65r-yf5i.json?'+Rack::Utils.build_query({
+  source: 'https://data.lacity.org/resource/pvft-t768.json?'+Rack::Utils.build_query({
     '$order' => 'updateddate DESC',
     '$limit' => 100,
     '$where' => <<-WHERE.oneline
@@ -19,16 +19,22 @@ time_zone = ActiveSupport::TimeZone['Pacific Time (US & Canada)']
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
   features = collection.map do |item|
     time = Time.iso8601(item['updateddate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
-    title = "#{SpyGlass::Salutations.next} #{time}"
+    servicetime = time = Time.iso8601(item['servicedate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
+    title = "#{SpyGlass::Salutations.next}"
     if item['createddate'] == item['updateddate']
-      title += "A service request has been created for #{item['requesttype']}"
+      title += "A service request has been created for #{item['requesttype']}, "
     elsif
-      title += "A service request has been updated for #{item['requesttype']}"
+      title += "A service request has been updated for #{item['requesttype']}, "
     end
     if item['addressverified'] = "Y"
       title += " at #{item['address']}"
     end
-    title += ". Status: #{item['status']}."
+    title += <<-TITLE.oneline
+    The following action has been taken: #{item['actiontaken']}, 
+    and assigned to the department/agency #{item['owner']}, #{item['assignto']}. 
+    It will be serviced on #{servicetime}.
+    Date: #{time}. Status: #{item['status']}.
+      TITLE
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
