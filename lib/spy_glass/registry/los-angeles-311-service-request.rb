@@ -17,7 +17,7 @@ opts = {
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
   features = collection.map do |item|
     title = "#{SpyGlass::Salutations.next} "
-    if createddate == updateddate
+    if item['createddate'] == item['updateddate']
       title += <<-TITLE.oneline
       A service request has been created for #{item['requesttype']}
         TITLE
@@ -26,7 +26,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       A service request has been updated for #{item['requesttype']}
         TITLE
     end
-    if addressverified = "Y"
+    if item['addressverified'] = "Y"
       title += <<-TITLE.oneline
        at #{item['address']}
         TITLE
