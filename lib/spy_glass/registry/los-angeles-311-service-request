@@ -4,7 +4,6 @@ opts = {
   path: '/los-angeles-311-service-request',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
   source: 'https://data.lacity.org/resource/94t3-k6yn.json?'+Rack::Utils.build_query({
-    '$order' => 'updateddate DESC',
     '$limit' => 100,
     '$where' => <<-WHERE.oneline
         srnumber IS NOT NULL AND
@@ -21,7 +20,7 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
         TITLE
 
         {
-          'srnumber' => item['srnumber'],
+          'id' => item['srnumber'],
           'type' => 'Feature',
           'geometry' => {
             'type' => 'Point',
