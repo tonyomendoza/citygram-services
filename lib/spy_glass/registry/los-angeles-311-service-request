@@ -18,7 +18,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
         title = <<-TITLE.oneline
             #{SpyGlass::Salutations.next} 
         TITLE
-
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
