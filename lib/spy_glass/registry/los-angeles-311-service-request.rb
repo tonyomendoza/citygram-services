@@ -29,9 +29,9 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
       title += " at #{item['address']}"
     end
     title += "Date: #{time}. Status: #{item['status']}. The following action has been taken: #{item['actiontaken']}, and assigned to the department/agency #{item['owner']}"
-    #if item['assignto'].blank == false
-    #  title += ", #{item['assignto']}"
-    #end
+    if item['assignto'].blank? == false
+      title += ", #{item['assignto']}"
+    end
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
