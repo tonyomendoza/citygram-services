@@ -19,7 +19,6 @@ time_zone = ActiveSupport::TimeZone['Pacific Time (US & Canada)']
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
   features = collection.map do |item|
     time = Time.iso8601(item['updateddate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
-    #servicetime = Time.iso8601(item['servicedate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
     title = "#{SpyGlass::Salutations.next}"
     if item['createddate'] == item['updateddate']
       title += "A service request has been created for #{item['requesttype']}, "
@@ -29,8 +28,16 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     if item['addressverified'] = "Y"
       title += " at #{item['address']}"
     end
-    title += "Date: #{time}. Status: #{item['status']}. The following action has been taken: #{item['actiontaken']}, and assigned to the department/agency #{item['owner']}, #{item['assignto']}."
-    #It will be serviced on #{servicetime}."
+    title += "Date: #{time}. Status: #{item['status']}. The following action has been taken: #{item['actiontaken']}, and assigned to the department/agency #{item['owner']}"
+    if item['assignto'].blank == false
+      title += ", #{item['assignto']}"
+    end
+    if item['servicedate'].blank == false
+      servicetime = Time.iso8601(item['servicedate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
+      title += ". It will be serviced on #{servicetime}."
+    else
+      title += "."
+    end
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
