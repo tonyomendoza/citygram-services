@@ -1,7 +1,7 @@
 require 'spy_glass/registry'
 
 opts = {
-  path: '/los-angeles-311-service-request',
+  path: '/los-angeles-311-service-requests',
   cache: SpyGlass::Cache::Memory.new(expires_in: 1200),
   source: 'https://data.lacity.org/resource/pvft-t768.json?'+Rack::Utils.build_query({
     '$order' => 'updateddate DESC',
