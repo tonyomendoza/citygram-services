@@ -29,12 +29,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     if item['addressverified'] = "Y"
       title += " at #{item['address']}"
     end
-    title += <<-TITLE.oneline
-    The following action has been taken: #{item['actiontaken']}, 
-    and assigned to the department/agency #{item['owner']}, #{item['assignto']}. 
-    It will be serviced on #{servicetime}.
-    Date: #{time}. Status: #{item['status']}.
-      TITLE
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
