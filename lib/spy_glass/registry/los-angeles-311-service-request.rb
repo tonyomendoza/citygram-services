@@ -32,12 +32,6 @@ SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
     if item['assignto'].blank == false
       title += ", #{item['assignto']}"
     end
-    if item['servicedate'].blank == false
-      servicetime = Time.iso8601(item['servicedate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
-      title += ". It will be serviced on #{servicetime}."
-    else
-      title += "."
-    end
         {
           'id' => item['srnumber'],
           'type' => 'Feature',
