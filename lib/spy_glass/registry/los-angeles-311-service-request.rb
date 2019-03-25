@@ -19,14 +19,14 @@ time_zone = ActiveSupport::TimeZone['Pacific Time (US & Canada)']
 SpyGlass::Registry << SpyGlass::Client::Socrata.new(opts) do |collection|
   features = collection.map do |item|
     time = Time.iso8601(item['updateddate']).in_time_zone(time_zone).strftime("%m/%d %I:%M %p")
-    title = "#{SpyGlass::Salutations.next}"
+    title = "#{SpyGlass::Salutations.next} "
     if item['createddate'] == item['updateddate']
       title += "A service request has been created for #{item['requesttype']}, "
     elsif
       title += "A service request has been updated for #{item['requesttype']}, "
     end
     if item['addressverified'] = "Y"
-      title += " at #{item['address']}. "
+      title += "at #{item['address']}. "
     end
     title += "Date: #{time}. Status: #{item['status']}. The following action has been taken: #{item['actiontaken']}, and assigned to the department/agency #{item['owner']}"
     if item['assignto'].blank? == false
